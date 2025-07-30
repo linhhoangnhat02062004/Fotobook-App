@@ -41,13 +41,3 @@
     - [Tab Followings]
     - [Tab Followers]
 
-
-
-1. Social Sign up / Log in
-2. Infinity loading post
-3. Pagination
-4. Add existing photos to an album
-5. Notify users when someone likes a photo / an album
-6. Send emails to deleted / inactivated users
-7. Include `:confirmable` in devise
-8. Search box
