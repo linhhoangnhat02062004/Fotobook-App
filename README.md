@@ -2,12 +2,12 @@
 
 **User & Admin account for testing**
 1. Admin:
-mail: admin@fotobook.com
-pass: password123
+- Email: admin@fotobook.com
+- Password: password123
 
 2. User:
-mail: linhhoangnhat26@gmail.com
-pass: 0393411584
+- Email: linhhoangnhat26@gmail.com
+- Password: 0393411584
 
 
 **Features**:
