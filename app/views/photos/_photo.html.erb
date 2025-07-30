@@ -1,0 +1,20 @@
+<% photos.each do |photo| %>
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <%= image_tag photo.image.url, class: 'img-fluid rounded-start', alt: photo.title %>
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title"><%= photo.title %></h5>
+          <p class="card-text"><%= photo.description %></p>
+          <p class="card-text"><small class="text-muted">Posted by <%= photo.user.name %> at <%= photo.created_at.strftime("%B %d, %Y") %></small></p>
+          <div class="d-flex justify-content-between">
+            <span><%= photo.likes_count %> Likes</span>
+            <span><%= link_to 'View', photo_path(photo), class: 'btn btn-link' %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
