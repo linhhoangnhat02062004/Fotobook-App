@@ -1,0 +1,199 @@
+<% content_for :layout, "admin" %>
+
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-2">
+          <i class="fas fa-user me-3 text-primary"></i>User Details
+        </h1>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><%= link_to "Dashboard", admin_dashboard_path %></li>
+            <li class="breadcrumb-item"><%= link_to "Users", admin_users_path %></li>
+            <li class="breadcrumb-item active"><%= @user.full_name %></li>
+          </ol>
+        </nav>
+      </div>
+      <div class="d-flex gap-2">
+        <%= link_to "Back to Users", admin_users_path, class: "btn btn-outline-secondary" %>
+        <%= link_to "View Profile", user_path(@user), class: "btn btn-primary", target: "_blank" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <!-- User Info Card -->
+  <div class="col-md-4">
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h5 class="admin-card-title">
+          <i class="fas fa-user-circle me-2"></i>User Information
+        </h5>
+      </div>
+      <div class="admin-card-body text-center">
+        <div class="mb-3">
+          <% if @user.avatar.present? %>
+            <%= image_tag @user.avatar.url, class: "rounded-circle border", width: 120, height: 120, style: "object-fit: cover;" %>
+          <% else %>
+            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white mx-auto" style="width: 120px; height: 120px; font-size: 3rem; font-weight: 600;">
+              <%= @user.first_name.first.upcase %><%= @user.last_name.first.upcase %>
+            </div>
+          <% end %>
+        </div>
+        
+        <h4 class="mb-2"><%= @user.full_name %></h4>
+        <p class="text-muted mb-3"><%= @user.email %></p>
+        
+        <div class="row text-center">
+          <div class="col-6">
+            <div class="border-end">
+              <h5 class="mb-1"><%= @user.albums.count %></h5>
+              <small class="text-muted">Albums</small>
+            </div>
+          </div>
+          <div class="col-6">
+            <h5 class="mb-1"><%= @user.photos.count %></h5>
+            <small class="text-muted">Photos</small>
+          </div>
+        </div>
+        
+        <hr class="my-3">
+        
+        <div class="d-grid gap-2">
+          <% if @user.admin? %>
+            <span class="badge bg-danger fs-6 px-3 py-2">
+              <i class="fas fa-shield-alt me-1"></i>Admin User
+            </span>
+          <% else %>
+            <span class="badge bg-secondary fs-6 px-3 py-2">
+              <i class="fas fa-user me-1"></i>Regular User
+            </span>
+          <% end %>
+          
+          <span class="badge <%= @user.status_badge_class %> fs-6 px-3 py-2">
+            <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+            <%= @user.status_text %>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Content -->
+  <div class="col-md-8">
+    <!-- Account Status -->
+    <div class="admin-card mb-4">
+      <div class="admin-card-header">
+        <h5 class="admin-card-title">
+          <i class="fas fa-info-circle me-2"></i>Account Status
+        </h5>
+      </div>
+      <div class="admin-card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center mb-3">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              <div>
+                <div class="fw-medium">Email Status</div>
+                <small class="text-muted">Active Account</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center mb-3">
+              <i class="fas fa-calendar-alt text-primary me-2"></i>
+              <div>
+                <div class="fw-medium">Member Since</div>
+                <small class="text-muted"><%= @user.created_at.strftime("%B %d, %Y") %></small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Albums -->
+    <div class="admin-card mb-4">
+      <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h5 class="admin-card-title">
+          <i class="fas fa-images me-2"></i>Recent Albums
+        </h5>
+        <%= link_to "View All Albums", admin_show_album_path(@user), class: "btn btn-sm btn-outline-primary" %>
+      </div>
+      <div class="admin-card-body">
+        <% if @user.albums.any? %>
+          <div class="row">
+            <% @user.albums.order(created_at: :desc).limit(6).each do |album| %>
+              <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center p-3 border rounded">
+                  <div class="me-3">
+                    <% if album.cover_photo&.image.present? %>
+                      <%= image_tag album.cover_photo.image.url, class: "rounded", width: 60, height: 60, style: "object-fit: cover;" %>
+                    <% else %>
+                      <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="fas fa-images text-muted"></i>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="fw-medium"><%= album.title %></div>
+                    <small class="text-muted"><%= album.photos.count %> photos</small>
+                    <div class="mt-1">
+                      <span class="badge <%= album.sharing_mode == 'private' ? 'bg-warning' : 'bg-success' %>">
+                        <%= album.sharing_mode.titleize %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-muted text-center">No albums created yet</p>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Recent Photos -->
+    <div class="admin-card">
+      <div class="admin-card-header d-flex justify-content-between align-items-center">
+        <h5 class="admin-card-title">
+          <i class="fas fa-camera me-2"></i>Recent Photos
+        </h5>
+        <%= link_to "View All Photos", admin_photos_path, class: "btn btn-sm btn-outline-primary" %>
+      </div>
+      <div class="admin-card-body">
+        <% if @user.photos.any? %>
+          <div class="row">
+            <% @user.photos.order(created_at: :desc).limit(8).each do |photo| %>
+              <div class="col-md-3 mb-3">
+                <div class="position-relative">
+                  <% if photo.image.present? %>
+                    <%= image_tag photo.image.url, class: "img-fluid rounded", style: "width: 100%; height: 120px; object-fit: cover;" %>
+                  <% else %>
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 100%; height: 120px;">
+                      <i class="fas fa-camera text-muted"></i>
+                    </div>
+                  <% end %>
+                  <div class="position-absolute top-0 end-0 m-1">
+                    <span class="badge <%= photo.sharing_mode == 'private' ? 'bg-warning' : 'bg-success' %>">
+                      <%= photo.sharing_mode.titleize %>
+                    </span>
+                  </div>
+                </div>
+                <div class="mt-2">
+                  <div class="fw-medium text-truncate"><%= photo.title %></div>
+                  <small class="text-muted"><%= time_ago_in_words(photo.created_at) %> ago</small>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-muted text-center">No photos uploaded yet</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div> 

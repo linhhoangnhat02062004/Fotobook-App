@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fotobook - Edit Photo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-1 px-5 mb-1">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">Fotobook</a>
+      <form class="d-flex mx-2 flex-grow-1" style="max-width:600px;">
+        <input class="form-control form-control-sm" type="search" placeholder="Search Photo / Album" aria-label="Search">
+      </form>
+      <div class="ms-auto">
+        <a href="#" class="text-white fw-bold me-2">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Left sidebar -->
+      <div class="col-12 col-md-2" id="left-content">
+        <div class="d-flex flex-column align-items-start">
+          <a href="/feeds" class="btn btn-light mb-3">Feeds</a>
+          <a href="#" class="btn btn-light">Discover</a>
+        </div>
+      </div>
+
+      <!-- Right content -->
+      <div class="col-12 col-md-10" id="right-content">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Edit Photo</h4>
+            <%= button_to 'Delete Photo', @photo, 
+                method: :delete, 
+                class: 'btn btn-danger btn-sm', 
+                data: { confirm: 'Are you sure you want to delete this photo? This action cannot be undone.' } %>
+          </div>
+          <div class="card-body">
+            <%= form_with(model: @photo, local: true, class: 'needs-validation', novalidate: true, multipart: true) do |form| %>
+              <% if @photo.errors.any? %>
+                <div class="alert alert-danger">
+                  <h5><%= pluralize(@photo.errors.count, "error") %> prohibited this photo from being saved:</h5>
+                  <ul>
+                    <% @photo.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <div class="row">
+                <!-- Image Section -->
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <%= form.label :image, 'Current Image', class: 'form-label' %>
+                    <div class="current-image-container">
+                      <% if @photo.image.present? %>
+                        <%= image_tag @photo.image.url, 
+                            class: 'img-fluid rounded', 
+                            alt: @photo.title, 
+                            style: 'max-height: 300px; width: 100%; object-fit: cover;' %>
+                      <% else %>
+                        <div class="border rounded p-4 text-center text-muted">
+                          <i class="fas fa-image fa-3x mb-3"></i>
+                          <p>No image uploaded</p>
+                        </div>
+                      <% end %>
+                    </div>
+                    
+                    <div class="mt-3">
+                      <%= form.label :image, 'Change Image (Optional)', class: 'form-label' %>
+                      <div class="upload-area border-2 border-dashed border-secondary rounded p-3 text-center" 
+                           id="uploadArea" 
+                           style="border-style: dashed; min-height: 100px; cursor: pointer;">
+                        <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-1 small">Click to upload new image</p>
+                        <p class="small text-muted">JPG, PNG, GIF up to 5MB</p>
+                        <%= form.file_field :image, 
+                            class: 'form-control d-none', 
+                            id: 'photoImage',
+                            accept: 'image/jpeg,image/png,image/gif' %>
+                      </div>
+                      <div id="imagePreview" class="mt-3" style="display: none;">
+                        <img id="previewImg" src="" alt="Preview" class="img-fluid rounded" style="max-height: 200px;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Form Fields Section -->
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <%= form.label :title, class: 'form-label' %>
+                    <%= form.text_field :title, 
+                        class: 'form-control', 
+                        placeholder: 'Enter photo title (max 140 characters)', 
+                        maxlength: 140, 
+                        required: true %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= form.label :description, class: 'form-label' %>
+                    <%= form.text_area :description, 
+                        class: 'form-control', 
+                        placeholder: 'Enter photo description (max 300 characters)', 
+                        maxlength: 300, 
+                        rows: 4, 
+                        required: true %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= form.label :sharing_mode, class: 'form-label' %>
+                    <%= form.select :sharing_mode, 
+                        options_for_select([['Public', 'public'], ['Private', 'private']], @photo.sharing_mode), 
+                        {}, 
+                        class: 'form-select', 
+                        required: true %>
+                  </div>
+
+                  <div class="d-flex justify-content-between">
+                    <%= link_to 'Cancel', user_path(current_user), class: 'btn btn-secondary' %>
+                    <%= form.submit 'Update Photo', class: 'btn btn-primary' %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <%= javascript_include_tag 'application' %>
+  
+  <script>
+    // Image upload preview functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadArea = document.getElementById('uploadArea');
+      const photoImage = document.getElementById('photoImage');
+      const imagePreview = document.getElementById('imagePreview');
+      const previewImg = document.getElementById('previewImg');
+
+      // Click to upload
+      uploadArea.addEventListener('click', function() {
+        photoImage.click();
+      });
+
+      // Drag and drop functionality
+      uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#007bff';
+        uploadArea.style.backgroundColor = '#f8f9fa';
+      });
+
+      uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#6c757d';
+        uploadArea.style.backgroundColor = 'transparent';
+      });
+
+      uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#6c757d';
+        uploadArea.style.backgroundColor = 'transparent';
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          photoImage.files = files;
+          handleFileSelect(files[0]);
+        }
+      });
+
+      // File input change
+      photoImage.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+          handleFileSelect(e.target.files[0]);
+        }
+      });
+
+      function handleFileSelect(file) {
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!validTypes.includes(file.type)) {
+          alert('Please select a valid image file (JPG, PNG, GIF)');
+          return;
+        }
+
+        // Validate file size (5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('File size must be less than 5MB');
+          return;
+        }
+
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImg.src = e.target.result;
+          imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html> 

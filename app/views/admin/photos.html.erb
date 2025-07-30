@@ -1,0 +1,187 @@
+<% content_for :title, "Manage Photos" %>
+<% content_for :layout, "admin" %>
+
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Manage Photos</h1>
+      <div>
+        <span class="badge bg-primary fs-6"><%= @photos.total_count %> Photos</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-card">
+  <div class="admin-card-header">
+    <h5 class="admin-card-title">
+      <i class="fas fa-camera me-2"></i>All Photos
+    </h5>
+  </div>
+  <div class="admin-card-body">
+    <% if @photos.any? %>
+      <div class="table-responsive">
+        <table class="table admin-table">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Title</th>
+              <th>Owner</th>
+              <th>Album</th>
+              <th>Visibility</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @photos.each do |photo| %>
+              <tr>
+                <td>
+                  <div class="position-relative">
+                    <% if photo.image.present? %>
+                      <%= image_tag photo.image.url, class: 'rounded', width: 60, height: 60, style: 'object-fit: cover;' %>
+                    <% else %>
+                      <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="fas fa-camera text-muted"></i>
+                      </div>
+                    <% end %>
+                    <div class="position-absolute top-0 end-0 m-1">
+                      <span class="badge <%= photo.sharing_mode == 'private' ? 'badge-warning' : 'badge-success' %>">
+                        <%= photo.sharing_mode.titleize %>
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="fw-medium"><%= photo.title %></div>
+                  <small class="text-muted">
+                    <%= truncate(photo.description, length: 50) if photo.description.present? %>
+                  </small>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="me-2">
+                      <% if photo.user.avatar.present? %>
+                        <%= image_tag photo.user.avatar.url, class: 'rounded-circle', width: 30, height: 30 %>
+                      <% else %>
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width: 30px; height: 30px; font-size: 0.8rem;">
+                          <%= photo.user.first_name.first.upcase %><%= photo.user.last_name.first.upcase %>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div>
+                      <div class="fw-medium"><%= photo.user.full_name %></div>
+                      <small class="text-muted"><%= photo.user.email %></small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <% if photo.album.present? %>
+                    <div class="fw-medium"><%= photo.album.title %></div>
+                    <small class="text-muted">
+                      <span class="badge <%= photo.album.sharing_mode == 'private' ? 'badge-warning' : 'badge-success' %>">
+                        <%= photo.album.sharing_mode.titleize %>
+                      </span>
+                    </small>
+                  <% else %>
+                    <span class="text-muted">No Album</span>
+                  <% end %>
+                </td>
+                <td>
+                  <span class="badge <%= photo.sharing_mode == 'private' ? 'badge-warning' : 'badge-success' %>">
+                    <%= photo.sharing_mode.titleize %>
+                  </span>
+                </td>
+                <td>
+                  <div><%= photo.created_at.strftime("%b %d, %Y") %></div>
+                  <small class="text-muted"><%= time_ago_in_words(photo.created_at) %> ago</small>
+                </td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <%= link_to admin_photo_path(photo), class: 'btn btn-sm btn-outline-primary' do %>
+                      <i class="fas fa-eye"></i>
+                    <% end %>
+                    
+                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+                      <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <%= link_to 'View Photo', photo_path(photo), class: 'dropdown-item' %>
+                      </li>
+                      <li>
+                        <%= link_to 'Edit Photo', '#', class: 'dropdown-item', data: { bs_toggle: 'modal', bs_target: '#editPhotoModal' } %>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <% if photo.sharing_mode == 'private' %>
+                        <li>
+                          <%= button_to 'Make Public', '#', method: :patch, class: 'dropdown-item text-success' %>
+                        </li>
+                      <% else %>
+                        <li>
+                          <%= button_to 'Make Private', '#', method: :patch, class: 'dropdown-item text-warning' %>
+                        </li>
+                      <% end %>
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <%= button_to 'Delete Photo', admin_destroy_photo_path(photo), method: :delete, 
+                            class: 'dropdown-item text-danger',
+                            data: { confirm: 'Are you sure? This action cannot be undone.' } %>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="d-flex justify-content-center mt-4">
+        <%= paginate @photos %>
+      </div>
+    <% else %>
+      <div class="text-center py-5">
+        <i class="fas fa-camera fa-3x text-muted mb-3"></i>
+        <h4>No Photos Found</h4>
+        <p class="text-muted">There are no photos uploaded yet.</p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Edit Photo Modal -->
+<div class="modal fade" id="editPhotoModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Photo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-control" value="">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Visibility</label>
+            <select class="form-select">
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div> 

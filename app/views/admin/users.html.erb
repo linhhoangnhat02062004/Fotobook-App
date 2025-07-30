@@ -1,0 +1,388 @@
+<% content_for :title, "Manage Users" %>
+<% content_for :layout, "admin" %>
+
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-2">
+          <i class="fas fa-users me-3 text-primary"></i>Manage Users
+        </h1>
+        <p class="text-muted mb-0">Manage user accounts, permissions, and status</p>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <div class="stats-card bg-primary text-white p-3 rounded">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-users fa-2x me-3"></i>
+            <div>
+              <h3 class="mb-0"><%= @users.total_count %></h3>
+              <small>Total Users</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Search and Filter Section -->
+<div class="admin-card mb-4">
+  <div class="admin-card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-search"></i>
+          </span>
+          <input type="text" class="form-control" placeholder="Search users by name or email..." id="userSearch">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" id="statusFilter">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="suspended">Suspended</option>
+          <option value="banned">Banned</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" id="roleFilter">
+          <option value="">All Roles</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-card">
+  <div class="admin-card-header d-flex justify-content-between align-items-center">
+    <h5 class="admin-card-title mb-0">
+      <i class="fas fa-list me-2"></i>User List
+    </h5>
+    <div class="d-flex gap-2">
+      <button class="btn btn-sm btn-outline-secondary" id="exportUsers">
+        <i class="fas fa-download me-1"></i>Export
+      </button>
+      <button class="btn btn-sm btn-outline-primary" id="bulkActions">
+        <i class="fas fa-cog me-1"></i>Bulk Actions
+      </button>
+    </div>
+  </div>
+  <div class="admin-card-body">
+    <% if @users.any? %>
+      <div class="table-responsive">
+        <table class="table admin-table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 40px;">
+                <input type="checkbox" class="form-check-input" id="selectAll">
+              </th>
+              <th>User</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Role</th>
+              <th>Content</th>
+              <th>Joined</th>
+              <th style="width: 120px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @users.each do |user| %>
+              <tr class="user-row" data-user-id="<%= user.id %>" data-status="<%= user.status %>" data-role="<%= user.admin? ? 'admin' : 'user' %>">
+                <td>
+                  <input type="checkbox" class="form-check-input user-checkbox" value="<%= user.id %>">
+                </td>
+                                 <td data-label="User">
+                   <div class="d-flex align-items-center">
+                     <div class="me-3">
+                       <% if user.avatar.present? %>
+                         <%= image_tag user.avatar.url, class: 'rounded-circle border', width: 45, height: 45, style: 'object-fit: cover;' %>
+                       <% else %>
+                         <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white border" style="width: 45px; height: 45px; font-weight: 600;">
+                           <%= user.first_name.first.upcase %><%= user.last_name.first.upcase %>
+                         </div>
+                       <% end %>
+                     </div>
+                     <div>
+                       <div class="fw-semibold text-dark"><%= user.full_name %></div>
+                       <small class="text-muted">ID: <%= user.id %></small>
+                     </div>
+                   </div>
+                 </td>
+                <td>
+                  <div class="fw-medium"><%= user.email %></div>
+                  <small class="text-muted">
+                    <i class="fas fa-check-circle text-success me-1"></i>Active Account
+                  </small>
+                </td>
+                <td>
+                  <span class="badge <%= user.status_badge_class %> fs-6 px-3 py-2">
+                    <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                    <%= user.status_text %>
+                  </span>
+                </td>
+                <td>
+                  <% if user.admin? %>
+                    <span class="badge bg-danger fs-6 px-3 py-2">
+                      <i class="fas fa-shield-alt me-1"></i>Admin
+                    </span>
+                  <% else %>
+                    <span class="badge bg-secondary fs-6 px-3 py-2">
+                      <i class="fas fa-user me-1"></i>User
+                    </span>
+                  <% end %>
+                </td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <span class="badge bg-info fs-6 px-2 py-1">
+                      <i class="fas fa-images me-1"></i><%= user.albums.count %>
+                    </span>
+                    <span class="badge bg-info fs-6 px-2 py-1">
+                      <i class="fas fa-camera me-1"></i><%= user.photos.count %>
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <div class="fw-medium"><%= user.created_at.strftime("%b %d, %Y") %></div>
+                  <small class="text-muted"><%= time_ago_in_words(user.created_at) %> ago</small>
+                </td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <%= link_to admin_user_path(user), class: 'btn btn-sm btn-outline-primary', title: 'View Details' do %>
+                      <i class="fas fa-eye"></i>
+                    <% end %>
+                    
+                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" title: 'More Actions'>
+                      <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                      <li>
+                        <%= link_to user_path(user), class: 'dropdown-item', target: '_blank' do %>
+                          <i class="fas fa-external-link-alt me-2"></i>View Public Profile
+                        <% end %>
+                      </li>
+                      <li>
+                        <%= link_to '#', class: 'dropdown-item', data: { bs_toggle: 'modal', bs_target: '#editUserModal', user_id: user.id } do %>
+                          <i class="fas fa-edit me-2"></i>Edit User
+                        <% end %>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <% if user.status == 'active' %>
+                        <li>
+                          <%= button_to admin_update_user_path(user), method: :patch, 
+                              params: { user: { status: 'suspended' } },
+                              class: 'dropdown-item text-warning',
+                              data: { confirm: 'Are you sure you want to suspend this user?' } do %>
+                            <i class="fas fa-pause me-2"></i>Suspend User
+                          <% end %>
+                        </li>
+                      <% elsif user.status == 'suspended' %>
+                        <li>
+                          <%= button_to admin_update_user_path(user), method: :patch, 
+                              params: { user: { status: 'active' } },
+                              class: 'dropdown-item text-success',
+                              data: { confirm: 'Are you sure you want to activate this user?' } do %>
+                            <i class="fas fa-play me-2"></i>Activate User
+                          <% end %>
+                        </li>
+                      <% end %>
+                      <% unless user.admin? %>
+                        <li>
+                          <%= button_to admin_update_user_path(user), method: :patch, 
+                              params: { user: { admin: true } },
+                              class: 'dropdown-item text-primary',
+                              data: { confirm: 'Are you sure you want to make this user an admin?' } do %>
+                            <i class="fas fa-user-shield me-2"></i>Make Admin
+                          <% end %>
+                        </li>
+                      <% end %>
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <%= button_to admin_destroy_user_path(user), method: :delete, 
+                            class: 'dropdown-item text-danger',
+                            data: { confirm: 'Are you sure? This action cannot be undone and will delete all user data.' } do %>
+                          <i class="fas fa-trash me-2"></i>Delete User
+                        <% end %>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="d-flex justify-content-center mt-4">
+        <%= paginate @users %>
+      </div>
+    <% else %>
+      <div class="text-center py-5">
+        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+        <h4>No Users Found</h4>
+        <p class="text-muted">There are no users registered yet.</p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-control" value="">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-control" value="">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" value="">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select">
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+              <option value="banned">Banned</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="adminCheck">
+              <label class="form-check-label" for="adminCheck">
+                Admin privileges
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk Actions Modal -->
+<div class="modal fade" id="bulkActionsModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Bulk Actions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Selected users: <span id="selectedCount">0</span></p>
+        <div class="d-grid gap-2">
+          <button class="btn btn-outline-success" id="bulkActivate">
+            <i class="fas fa-play me-2"></i>Activate Selected
+          </button>
+          <button class="btn btn-outline-warning" id="bulkSuspend">
+            <i class="fas fa-pause me-2"></i>Suspend Selected
+          </button>
+          <button class="btn btn-outline-danger" id="bulkDelete">
+            <i class="fas fa-trash me-2"></i>Delete Selected
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Search functionality
+  const searchInput = document.getElementById('userSearch');
+  const userRows = document.querySelectorAll('.user-row');
+  
+  searchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    
+    userRows.forEach(row => {
+      const userName = row.querySelector('.fw-semibold').textContent.toLowerCase();
+      const userEmail = row.querySelector('.fw-medium').textContent.toLowerCase();
+      
+      if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+  
+  // Filter functionality
+  const statusFilter = document.getElementById('statusFilter');
+  const roleFilter = document.getElementById('roleFilter');
+  
+  function applyFilters() {
+    const statusValue = statusFilter.value;
+    const roleValue = roleFilter.value;
+    
+    userRows.forEach(row => {
+      const status = row.dataset.status;
+      const role = row.dataset.role;
+      
+      const statusMatch = !statusValue || status === statusValue;
+      const roleMatch = !roleValue || role === roleValue;
+      
+      if (statusMatch && roleMatch) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+  
+  statusFilter.addEventListener('change', applyFilters);
+  roleFilter.addEventListener('change', applyFilters);
+  
+  // Select all functionality
+  const selectAll = document.getElementById('selectAll');
+  const userCheckboxes = document.querySelectorAll('.user-checkbox');
+  
+  selectAll.addEventListener('change', function() {
+    userCheckboxes.forEach(checkbox => {
+      checkbox.checked = this.checked;
+    });
+    updateSelectedCount();
+  });
+  
+  userCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', updateSelectedCount);
+  });
+  
+  function updateSelectedCount() {
+    const selectedCount = document.querySelectorAll('.user-checkbox:checked').length;
+    document.getElementById('selectedCount').textContent = selectedCount;
+  }
+  
+  // Bulk actions
+  document.getElementById('bulkActions').addEventListener('click', function() {
+    const selectedCount = document.querySelectorAll('.user-checkbox:checked').length;
+    if (selectedCount > 0) {
+      new bootstrap.Modal(document.getElementById('bulkActionsModal')).show();
+    } else {
+      alert('Please select at least one user for bulk actions.');
+    }
+  });
+  
+  // Export functionality
+  document.getElementById('exportUsers').addEventListener('click', function() {
+    alert('Export functionality will be implemented here.');
+  });
+});
+</script> 
