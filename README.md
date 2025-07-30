@@ -1,24 +1,53 @@
-# README
+#Fotobook
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**Features**:
 
-Things you may want to cover:
+1. Authentication
+    - [Sign up]
+    - [Sign in]
+    - [Log out]
+    - [Admin Sign in]
 
-* Ruby version
+2. Photo
+    - [Admin Manage Photo]
 
-* System dependencies
+3. Album
+    - [Add Album]
+    - [Edit Album]
+    - [Admin Manage Album]
+    - [Add existing photos to an album]
 
-* Configuration
+4. User
+    - [Admin Edit User]
+    - [Admin Delete User]
+    - [Follow User]
+    - [Unfollow User]
+    - [Guest Feed]
+    - [User Feed]
+    - [Like]
+    - [Search box in Admin]
 
-* Database creation
 
-* Database initialization
+5. Other User Profile
+    - [Tab Photos]
+    - [Tab Albums]
+    - [Tab Followings]
+    - [Tab Followers]
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+6. My User Profile
+    - [Tab Photos]
+    - [Tab Albums]
+    - [Tab Followings]
+    - [Tab Followers]
 
-* Deployment instructions
 
-* ...
+
+1. Social Sign up / Log in
+2. Infinity loading post
+3. Pagination
+4. Add existing photos to an album
+5. Notify users when someone likes a photo / an album
+6. Send emails to deleted / inactivated users
+7. Include `:confirmable` in devise
+8. Search box
