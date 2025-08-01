@@ -2,7 +2,7 @@ class AdminController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!
   before_action :ensure_admin
-  before_action :set_user, only: [:show_user, :update_user, :destroy_user]
+  before_action :set_user, only: [:show_user, :edit_user, :update_user, :destroy_user]
   before_action :set_album, only: [:show_album, :update_album, :destroy_album]
   before_action :set_photo, only: [:show_photo, :update_photo, :destroy_photo]
 
@@ -10,29 +10,33 @@ class AdminController < ApplicationController
     @total_users = User.count
     @total_albums = Album.count
     @total_photos = Photo.count
-    @recent_users = User.order(created_at: :desc).limit(5)
-    @recent_albums = Album.order(created_at: :desc).limit(5)
-    @recent_photos = Photo.order(created_at: :desc).limit(5)
+    @recent_users = User.includes(:albums, :photos).order(created_at: :desc).limit(5)
+    @recent_albums = Album.includes(:user, :photos).order(created_at: :desc).limit(5)
+    @recent_photos = Photo.includes(:user, :albums).order(created_at: :desc).limit(5)
   end
 
   # Users Management
   def users
-    @users = User.includes(:albums, :photos)
+    @users = User.includes(:albums, :photos, :likes)
                  .order(created_at: :desc)
                  .page(params[:page])
                  .per(20)
   end
 
   def show_user
-    @user_albums = @user.albums.order(created_at: :desc)
-    @user_photos = @user.photos.order(created_at: :desc)
+    @user_albums = @user.albums.includes(:photos).order(created_at: :desc)
+    @user_photos = @user.photos.includes(:albums).order(created_at: :desc)
+  end
+
+  def edit_user
+    # User is already loaded with associations in set_user
   end
 
   def update_user
     if @user.update(user_params)
       redirect_to admin_user_path(@user), notice: 'User updated successfully'
     else
-      render :show_user, status: :unprocessable_entity
+      render :edit_user, status: :unprocessable_entity
     end
   end
 
@@ -43,14 +47,14 @@ class AdminController < ApplicationController
 
   # Albums Management
   def albums
-    @albums = Album.includes(:user, :photos)
+    @albums = Album.includes(:user, :photos, :likes)
                    .order(created_at: :desc)
                    .page(params[:page])
                    .per(20)
   end
 
   def show_album
-    @album_photos = @album.photos.order(created_at: :desc)
+    @album_photos = @album.photos.includes(:user).order(created_at: :desc)
   end
 
   def update_album
@@ -68,13 +72,14 @@ class AdminController < ApplicationController
 
   # Photos Management
   def photos
-    @photos = Photo.includes(:user, :album)
+    @photos = Photo.includes(:user, :albums)
                    .order(created_at: :desc)
                    .page(params[:page])
-                   .per(20)
+                   .per(40)
   end
 
   def show_photo
+    # Photo is already loaded with associations in set_photo
   end
 
   def update_photo
@@ -99,19 +104,19 @@ class AdminController < ApplicationController
   end
 
   def set_user
-    @user = User.find(params[:id])
+    @user = User.includes(:albums, :photos).find(params[:id])
   end
 
   def set_album
-    @album = Album.find(params[:id])
+    @album = Album.includes(:user, :photos).find(params[:id])
   end
 
   def set_photo
-    @photo = Photo.find(params[:id])
+    @photo = Photo.includes(:user, :albums).find(params[:id])
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :admin, :status)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation, :avatar, :admin, :status)
   end
 
   def album_params

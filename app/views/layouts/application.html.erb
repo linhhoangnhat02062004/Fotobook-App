@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+  <%= favicon_link_tag 'Fotobook_icon.webp' %>
+
   <title><%= content_for(:title) || "Fotobook" %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,6 +27,7 @@
 </head>
 
 <body>
+  <%= render 'shared/navigation' %>
   <!-- Flash Messages -->
   <% if notice %>
     <div class="alert alert-success alert-dismissible fade show fade-in" role="alert">

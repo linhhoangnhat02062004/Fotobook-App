@@ -73,28 +73,34 @@ class AlbumsController < ApplicationController
 
   def destroy
     @album.destroy
-    redirect_to albums_url, notice: 'Album was successfully deleted.'
+    redirect_to user_path(current_user), notice: 'Album was successfully deleted.'
   end
 
   def like
-    # TODO: Implement like logic
-    # current_user.like(@album)
-    redirect_back(fallback_location: album_path(@album), notice: 'Album liked!')
+    if user_signed_in?
+      current_user.like(@album)
+      redirect_back(fallback_location: album_path(@album), notice: 'Album liked!')
+    else
+      redirect_back(fallback_location: album_path(@album), alert: 'Please sign in to like albums')
+    end
   end
 
   def unlike
-    # TODO: Implement unlike logic
-    # current_user.unlike(@album)
-    redirect_back(fallback_location: album_path(@album), notice: 'Album unliked!')
+    if user_signed_in?
+      current_user.unlike(@album)
+      redirect_back(fallback_location: album_path(@album), notice: 'Album unliked!')
+    else
+      redirect_back(fallback_location: album_path(@album), alert: 'Please sign in to unlike albums')
+    end
   end
 
   private
 
   def set_album
-    @album = Album.find(params[:id])
+    @album = Album.includes(:user, :photos).find(params[:id])
   end
 
   def album_params
-    params.require(:album).permit(:title, :description, :sharing_mode, photo_ids: [])
+    params.require(:album).permit(:title, :description, :sharing_mode, :cover_image, photo_ids: [])
   end
 end

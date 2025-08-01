@@ -126,10 +126,10 @@
             <div class="mb-3">
               <label class="form-label fw-medium">Album</label>
               <div class="form-control-plaintext">
-                <% if @photo.album.present? %>
-                  <%= @photo.album.title %>
-                  <span class="badge <%= @photo.album.sharing_mode == 'private' ? 'badge-warning' : 'badge-success' %>">
-                    <%= @photo.album.sharing_mode.titleize %>
+                <% if @photo.albums.any? %>
+                  <%= @photo.albums.first.title %>
+                  <span class="badge <%= @photo.albums.first.sharing_mode == 'private' ? 'badge-warning' : 'badge-success' %>">
+                    <%= @photo.albums.first.sharing_mode.titleize %>
                   </span>
                 <% else %>
                   No Album

@@ -30,15 +30,33 @@ class UsersController < ApplicationController
   end
 
   def follow
-    # TODO: Implement follow logic
-    # current_user.follow(@user)
-    redirect_back(fallback_location: user_path(@user), notice: 'Followed successfully.')
+    @user = User.find(params[:id])
+    if current_user != @user
+      current_user.followings << @user
+      redirect_back(fallback_location: user_path(@user), notice: "You are now following #{@user.first_name}")
+    else
+      redirect_back(fallback_location: user_path(@user), alert: "You cannot follow yourself")
+    end
   end
 
   def unfollow
-    # TODO: Implement unfollow logic
-    # current_user.unfollow(@user)
-    redirect_back(fallback_location: user_path(@user), notice: 'Unfollowed successfully.')
+    @user = User.find(params[:id])
+    if current_user.following?(@user)
+      current_user.followings.delete(@user)
+      redirect_back(fallback_location: user_path(@user), notice: "You have unfollowed #{@user.first_name}")
+    else
+      redirect_back(fallback_location: user_path(@user), alert: "You are not following this user")
+    end
+  end
+
+  def followers
+    @user = User.find(params[:id])
+    @followers = @user.followers
+  end
+
+  def followings
+    @user = User.find(params[:id])
+    @followings = @user.followings
   end
 
   private

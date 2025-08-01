@@ -1,151 +1,41 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fotobook - Photo Detail</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <%= stylesheet_link_tag 'application', media: 'all' %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
-  <!-- Header -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-1 px-5 mb-1">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="#">Fotobook</a>
-      <form class="d-flex mx-2 flex-grow-1" style="max-width:600px;">
-        <input class="form-control form-control-sm" type="search" placeholder="Search Photo / Album" aria-label="Search">
-      </form>
-      <div class="ms-auto">
-        <a href="#" class="text-white fw-bold me-2">Logout</a>
-      </div>
-    </div>
-  </nav>
+<% content_for :title, @photo.title %>
 
-  <!-- Main Content -->
-  <div class="container mt-4">
-    <div class="row">
-      <!-- Left sidebar -->
-      <div class="col-12 col-md-2" id="left-content">
-        <div class="d-flex flex-column align-items-start">
-          <a href="/feeds" class="btn btn-light mb-3">Feeds</a>
-          <a href="#" class="btn btn-light">Discover</a>
-        </div>
-      </div>
 
-      <!-- Right content -->
-      <div class="col-12 col-md-10" id="right-content">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <!-- Photo Display -->
-              <div class="col-md-8">
-                <div class="photo-container text-center">
-                  <% if @photo.image.present? %>
-                    <%= image_tag @photo.image.url, 
-                        class: 'img-fluid rounded', 
-                        alt: @photo.title, 
-                        style: 'max-height: 500px; width: 100%; object-fit: contain;' %>
-                  <% else %>
-                    <div class="border rounded p-5 text-center text-muted">
-                      <i class="fas fa-image fa-5x mb-3"></i>
-                      <p>No image available</p>
-                    </div>
-                  <% end %>
-                </div>
-              </div>
 
-              <!-- Photo Info -->
-              <div class="col-md-4">
-                <div class="photo-info">
-                  <h3 class="mb-3"><%= @photo.title %></h3>
-                  
-                  <div class="mb-3">
-                    <p class="text-muted"><%= @photo.description %></p>
-                  </div>
-
-                  <div class="mb-3">
-                    <div class="d-flex align-items-center text-muted">
-                      <span class="me-3">
-                        <i class="fas fa-user"></i> <%= @photo.user.first_name %> <%= @photo.user.last_name %>
-                      </span>
-                      <span class="me-3">
-                        <i class="fas fa-calendar"></i> <%= @photo.created_at.strftime("%B %d, %Y") %>
-                      </span>
-                      <span>
-                        <% if @photo.sharing_mode == 'private' %>
-                          <i class="fas fa-lock"></i> Private
-                        <% else %>
-                          <i class="fas fa-globe"></i> Public
-                        <% end %>
-                      </span>
-                    </div>
-                  </div>
-
-                  <!-- Action Buttons -->
-                  <div class="mb-3">
-                    <button class="btn btn-outline-primary me-2" onclick="likePhoto(<%= @photo.id %>)">
-                      <i class="fas fa-heart"></i> Like
-                    </button>
-                    <button class="btn btn-outline-secondary me-2" onclick="sharePhoto(<%= @photo.id %>)">
-                      <i class="fas fa-share"></i> Share
-                    </button>
-                  </div>
-
-                  <!-- Owner Actions -->
-                  <% if current_user == @photo.user %>
-                    <div class="border-top pt-3">
-                      <h6 class="text-muted mb-2">Owner Actions</h6>
-                      <div class="d-flex gap-2">
-                        <%= link_to edit_photo_path(@photo), class: 'btn btn-outline-primary btn-sm' do %>
-                          <i class="fas fa-edit"></i> Edit
-                        <% end %>
-                        <%= button_to photo_path(@photo), 
-                            method: :delete, 
-                            class: 'btn btn-outline-danger btn-sm', 
-                            data: { confirm: 'Are you sure you want to delete this photo?' } do %>
-                          <i class="fas fa-trash"></i> Delete
-                        <% end %>
-                      </div>
-                    </div>
-                  <% end %>
-
-                  <!-- Albums this photo belongs to -->
-                  <% if @photo.albums.any? %>
-                    <div class="border-top pt-3 mt-3">
-                      <h6 class="text-muted mb-2">In Albums</h6>
-                      <% @photo.albums.each do |album| %>
-                        <%= link_to album_path(album), class: 'btn btn-outline-secondary btn-sm me-2 mb-1' do %>
-                          <i class="fas fa-images"></i> <%= album.title %>
-                        <% end %>
-                      <% end %>
-                    </div>
-                  <% end %>
-                </div>
-              </div>
-            </div>
+<!-- Main Content -->
+<div class="container mt-1">
+  <div class="row justify-content-center">
+    <div class="col-lg-11">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+          <!-- Photo Title -->
+          <div class="text-center mb-1">
+            <h2 class="fw-bold text-dark fs-5"><%= @photo.title %></h2>
           </div>
+          
+          <!-- Photo Display -->
+          <div class="text-center mb-2">
+            <% if @photo.image.present? %>
+              <%= image_tag @photo.image.url, 
+                  class: 'img-fluid rounded shadow', 
+                  alt: @photo.title, 
+                  style: 'max-height: 600px; width: 100%; object-fit: contain;' %>
+            <% else %>
+              <div class="border rounded p-2 text-center text-muted">
+                <i class="fas fa-image fa-5x mb-3"></i>
+                <p>No image available</p>
+              </div>
+            <% end %>
+          </div>
+          
+          <!-- Photo Description -->
+          <% if @photo.description.present? %>
+            <div class="text-center">
+              <p class="text-muted fs-6"><%= @photo.description %></p>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  <%= javascript_include_tag 'application' %>
-  
-  <script>
-    function likePhoto(photoId) {
-      // This would typically make an AJAX request to like the photo
-      console.log('Liking photo:', photoId);
-      alert('Like functionality would be implemented here');
-    }
-
-    function sharePhoto(photoId) {
-      // This would typically open a share dialog
-      console.log('Sharing photo:', photoId);
-      alert('Share functionality would be implemented here');
-    }
-  </script>
-</body>
-</html> 
+</div>

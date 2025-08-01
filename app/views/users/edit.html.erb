@@ -1,0 +1,72 @@
+<div class="container py-2">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+      <div class="card shadow rounded-3 p-4">
+        <h3 class="fw-bold mb-4 text-primary fs-4">Edit User Profile</h3>
+        <%= form_with(model: @user, url: update_profile_path, local: true, html: { multipart: true, class: 'mb-4' }) do |f| %>
+          <div class="text-center mb-4">
+            <% if @user.avatar.present? %>
+              <div class="position-relative d-inline-block">
+                <%= image_tag @user.avatar.url, width: 150, height: 150, class: "rounded-circle border border-3 border-white shadow mb-2", style: "object-fit: cover;" %>
+                <label for="user_avatar" class="btn btn-sm position-absolute bottom-0 start-50 translate-middle-x mb-1 px-3" style="border-radius: 15px; cursor: pointer; background-color:rgb(222, 222, 222); color: dark;">Change</label>
+                <%= f.file_field :avatar, accept: "image/jpeg,image/png", class: "d-none", id: "user_avatar" %>
+              </div>
+            <% else %>
+              <div class="position-relative d-inline-block">
+                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-2" style="width: 120px; height: 120px;">
+                  <i class="fas fa-user fa-3x text-white"></i>
+                </div>
+                <label for="user_avatar" class="btn btn-sm btn-secondary position-absolute bottom-0 start-50 translate-middle-x mb-1 px-2" style="border-radius: 15px; cursor: pointer;">Change</label>
+                <%= f.file_field :avatar, accept: "image/jpeg,image/png", class: "d-none", id: "user_avatar" %>
+              </div>
+            <% end %>
+          </div>
+          <h5 class="fw-bold text-primary mb-3">Basic Information</h5>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <%= f.label :first_name, class: 'form-label fw-semibold' %>
+              <%= f.text_field :first_name, required: true, class: 'form-control' %>
+            </div>
+            <div class="col-md-4">
+              <%= f.label :last_name, class: 'form-label fw-semibold' %>
+              <%= f.text_field :last_name, required: true, class: 'form-control' %>
+            </div>
+            <div class="col-md-4">
+              <%= f.label :email, class: 'form-label fw-semibold' %>
+              <%= f.email_field :email, required: true, class: 'form-control' %>
+            </div>
+          </div>
+          <div class="text-center mb-3">
+            <%= f.submit "Save", class: "btn btn-primary px-4 fw-bold" %>
+          </div>
+        <% end %>
+        <h5 class="fw-bold text-primary mb-3 mt-4"> Change Password</h5>
+        <%= form_with(model: @user, url: update_profile_path, local: true) do |f| %>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <%= f.label :current_password, class: 'form-label fw-semibold' %>
+              <%= f.password_field :current_password, required: true, class: 'form-control' %>
+            </div>
+            <div class="col-md-4">
+              <%= f.label :password, "New Password", class: 'form-label fw-semibold' %>
+              <%= f.password_field :password, class: 'form-control' %>
+            </div>
+            <div class="col-md-4">
+              <%= f.label :password_confirmation, class: 'form-label fw-semibold' %>
+              <%= f.password_field :password_confirmation, class: 'form-control' %>
+            </div>
+          </div>
+          <div class="text-center mb-3">
+            <%= f.submit "Save", class: "btn btn-primary px-4 fw-bold" %>
+          </div>
+        <% end %>
+        <% if notice %>
+          <div class="alert alert-success"><%= notice %></div>
+        <% end %>
+        <% if alert %>
+          <div class="alert alert-danger"><%= alert %></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

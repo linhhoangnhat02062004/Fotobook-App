@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   # Main application routes
   get 'feeds', to: 'feeds#index', as: :feeds
   get 'discover', to: 'feeds#discover', as: :discover
+  get '/discovery', to: 'feeds#discovery', as: :discovery
+  get '/search', to: 'feeds#search', as: :search
   
   # User profile routes
   get 'profile', to: 'users#show', as: :profile, defaults: { id: 'current' }
@@ -52,6 +54,7 @@ Rails.application.routes.draw do
   get 'admin/dashboard', to: 'admin#dashboard', as: :admin_dashboard
   get 'admin/users', to: 'admin#users', as: :admin_users
   get 'admin/users/:id', to: 'admin#show_user', as: :admin_user
+  get 'admin/users/:id/edit', to: 'admin#edit_user', as: :edit_admin_user
   patch 'admin/users/:id', to: 'admin#update_user', as: :admin_update_user
   delete 'admin/users/:id', to: 'admin#destroy_user', as: :admin_destroy_user
   
@@ -77,4 +80,10 @@ Rails.application.routes.draw do
       resources :users, only: [:show]
     end
   end
+
+  # Follow/Unfollow routes
+  post '/users/:id/follow', to: 'users#follow'
+  delete '/users/:id/unfollow', to: 'users#unfollow'
+  get '/users/:id/followers', to: 'users#followers', as: :user_followers
+  get '/users/:id/followings', to: 'users#followings', as: :user_followings
 end

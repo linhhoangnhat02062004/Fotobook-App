@@ -23,6 +23,12 @@
   transition: background-color 0.15s ease-in-out;
 }
 
+.admin-photo-count {
+  font-size: 14.75px;
+  font-weight: 550;
+  color: #ffffff;
+}
+
 .admin-user-dropdown:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff !important;
@@ -49,7 +55,7 @@
 
 /* CSS Variables */
 :root {
-  --primary-color: #1877f2;
+  --primary-color: #1877f2; /* Facebook Blue */
   --secondary-color: #42a5f5;
   --success-color: #4caf50;
   --warning-color: #ff9800;
@@ -60,7 +66,15 @@
   --border-color: #dee2e6;
   --shadow: 0 2px 4px rgba(0,0,0,0.1);
   --shadow-lg: 0 4px 8px rgba(0,0,0,0.15);
+
+  /* Bootstrap Primary Color Override */
+  --bs-primary: #1877f2;
+  --bs-primary-rgb: 24, 119, 242;
+  --bs-primary-text-emphasis: #1877f2;
+  --bs-primary-bg-subtle: rgba(24, 119, 242, 0.1);
+  --bs-primary-border-subtle: rgba(24, 119, 242, 0.2);
 }
+
 
 /* Admin Layout Styles */
 .admin-body {
@@ -103,12 +117,12 @@
 }
 
 .admin-sidebar {
-  width: 250px;
+  width: 225px;
   background: #ffffff;
   border-right: 1px solid #dddfe2;
   position: fixed;
   left: 0;
-  top: 70px;
+  top: 60px;
   bottom: 0;
   overflow-y: auto;
 }
@@ -155,12 +169,12 @@
 }
 
 .admin-main {
+  margin-left: 230px;
   flex: 1;
-  margin-left: 250px;
 }
 
 .admin-content {
-  padding: 2rem;
+  padding: 1.75rem 1.5rem 0rem 1rem;
 }
 
 /* Admin Cards */
@@ -169,11 +183,10 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,.1);
   border: 1px solid #dddfe2;
-  margin-bottom: 1.5rem;
 }
 
 .admin-card-header {
-  padding: 1rem 1.5rem;
+  padding: 0.85rem 1.5rem;
   border-bottom: 1px solid #dddfe2;
   background-color: #f8f9fa;
   border-radius: 8px 8px 0 0;
@@ -187,7 +200,7 @@
 }
 
 .admin-card-body {
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 /* Admin Tables */
@@ -299,7 +312,7 @@
   }
   
   .admin-main {
-    margin-left: 0;
+    margin-left: 0; /* Trên mobile không cần margin-left */
   }
   
   .admin-content {
@@ -345,7 +358,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-control, .form-select {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .dropdown-item {
@@ -455,7 +468,7 @@ body {
 /* Card Styles */
 .card {
   border: none;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
   overflow: hidden;
@@ -467,7 +480,6 @@ body {
 }
 
 .card-header {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-bottom: 1px solid var(--border-color);
   padding: 1.25rem 1.5rem;
   font-weight: 600;
@@ -478,7 +490,7 @@ body {
 .btn {
   border-radius: 8px;
   font-weight: 500;
-  padding: 0.5rem 1.5rem;
+  padding: 0.45rem 1.05rem;
   transition: all 0.3s ease;
   border: none;
   font-size: 0.85rem;
@@ -517,11 +529,11 @@ body {
 /* Form Styles */
 .form-control, .form-select {
   border-radius: 8px;
-  border: 2px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
   padding: 0.75rem 1rem;
   font-weight: 500;
-  transition: all 0.3s ease;
-  font-size: 0.75rem;
+  transition: all 0.2s ease;
+  font-size: 0.84rem;
 }
 
 .form-control:focus, .form-select:focus {
@@ -667,8 +679,8 @@ body {
 
 /* Form Controls Large */
 .form-control-lg, .form-select-lg {
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
+  padding: 0.75rem 0.75rem;
+  font-size: 0.85rem;
 }
 
 .btn-lg {
@@ -773,14 +785,22 @@ body {
 }
 
 .navbar {
-  background-color: #3b5998 !important;
-  min-height: 47px;
+  background-color: #ffffff !important;
+  min-height: 60px;
 }
 
 .navbar-brand {
   color: #fff !important;
   font-weight: bold;
   font-size: 18px;
+}
+
+.fs-custom {
+  font-size: 14.05px;
+}
+
+.custom-icons{
+  font-size: 0.75rem;
 }
 
 .navbar .form-control {
@@ -824,7 +844,7 @@ body {
 
 /* Main Container */
 .main-container {
-  padding: 3rem 1rem;
+  padding: 2rem 1rem;
   min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
@@ -996,6 +1016,14 @@ h4 {
   font-size: 0.9rem !important;
 }
 
+/* Stats Divider */
+.stats-divider {
+  width: 0.8px;
+  height: 16px;
+  background-color: #858484;
+  margin: 0 0.75rem;
+}
+
 .btn.stats-btn:hover {
   color: #1877f2 !important;
   transform: translateY(-1px);
@@ -1063,9 +1091,11 @@ h4 {
   color: #1877f2 !important;
 }
 
-.btn.stats-btn .text-primary {
+.btn.stats-btn{
   color: inherit !important;
 }
+
+
 
 .btn.stats-btn * {
   color: inherit !important;
@@ -1073,7 +1103,6 @@ h4 {
 
 /* Profile Page Styles */
 .profile-avatar {
-  border: 4px solid white;
   box-shadow: var(--shadow-lg);
   transition: transform 0.3s ease;
 }
@@ -1085,10 +1114,49 @@ h4 {
 .profile-header {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1.8rem;
   margin-bottom: 2rem;
   box-shadow: var(--shadow);
   border: 1px solid var(--border-color);
+  max-width: 100%;
+}
+
+/* Centered Layout for User Profile */
+.container-fluid {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding-left: 2.15rem;
+  padding-right: 2.15rem;
+}
+
+@media (max-width: 1400px) {
+  .container-fluid {
+    max-width: 1200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .container-fluid {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container-fluid {
+    max-width: 900px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-fluid {
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .profile-header {
+    padding: 1.5rem;
+  }
 }
 
 .profile-stats {
@@ -1280,11 +1348,44 @@ h4 {
   transition: all 0.3s ease;
   border-radius: 12px;
   overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .photo-card:hover, .album-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
+}
+
+.photo-card .card-img-top, 
+.album-card .card-img-top {
+  height: 200px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.photo-card .card-body, 
+.album-card .card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Ensure consistent card heights */
+.col .card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.col .card .card-img-top {
+  flex-shrink: 0;
+}
+
+.col .card .card-body {
+  flex-grow: 1;
 }
 
 .photo-card .card-img-top, .album-card .card-img-top {
@@ -1293,6 +1394,18 @@ h4 {
 
 .photo-card:hover .card-img-top, .album-card:hover .card-img-top {
   transform: scale(1.05);
+}
+
+/* Content section spacing */
+
+
+/* Empty state centering */
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
 }
 
 /* Edit button overlay */
@@ -1352,3 +1465,5 @@ h4 {
     margin-bottom: 1.5rem;
   }
 }
+
+@import "bootstrap";

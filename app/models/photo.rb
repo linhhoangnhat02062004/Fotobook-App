@@ -3,6 +3,10 @@ class Photo < ApplicationRecord
   has_and_belongs_to_many :albums
   mount_uploader :image, ImageUploader
 
+  # Like associations
+  has_many :likes, as: :likeable, dependent: :destroy
+  has_many :liked_by_users, through: :likes, source: :user
+
   validates :title, presence: true, length: { maximum: 140 }
   validates :description, presence: true, length: { maximum: 300 }
   validates :sharing_mode, presence: true, inclusion: { in: %w[public private] }

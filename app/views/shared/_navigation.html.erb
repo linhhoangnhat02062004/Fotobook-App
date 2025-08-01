@@ -1,24 +1,24 @@
 <!-- Modern Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark">
-  <div class="container-fluid px-4">
+  <div class="container-fluid pl-3">
     <!-- Logo -->
     <a class="navbar-brand d-flex align-items-center" href="<%= root_path %>">
 
-      <span class="brand-text" style = "font-size: 15.5pt;">Fotobook</span>
+      <span class="brand-text text-primary " style = "font-size: 19.5pt;">Fotobook</span>
     </a>
 
     <!-- Search Form -->
-    <div class="search-container mx-auto d-none d-lg-block" style="max-width: 600px;">
+    <div class="search-container mx-auto d-none d-lg-block" style="max-width: 720px;">
       <form class="d-flex position-relative">
         <div class="input-group shadow-sm">
-          <span class="input-group-text bg-white border-end-0" style="border-radius: 15px 0 0 15px; border: 1px solid #e1e5e9;">
-            <i class="fas fa-search text-muted" style="font-size: 0.9rem;"></i>
+          <span class="input-group-text bg-white border-end-0" style="border-radius: 10px 0 0 10px; border: 1px solid #e1e5e9;">
+            <i class="fas fa-search text-muted" style="font-size: 1rem;"></i>
           </span>
           <input class="form-control border-start-0" 
                  type="search" 
                  placeholder="Search photos, albums, or people..." 
                  aria-label="Search"
-                 style="border-radius: 0 15px 15px 0; height: 35px ">
+                 style="border-radius: 0 10px 10px 0; height: 40px ">
         </div>
       </form>
     </div>
@@ -28,57 +28,59 @@
       <% if user_signed_in? %>
         <% unless current_user.admin? %>
           <!-- Navigation Links for Regular Users -->
-          <div class="nav-item me-4 d-none d-lg-block">
-            <a class="nav-link d-flex align-items-center" href="<%= feeds_path %>">
-              <i class="fas fa-home me-2"></i>
-              <span style = "font-size: 11pt; font-weight: bold">Feeds</span>
+          <div class="nav-item me-3 d-none d-lg-block">
+            <a class="nav-link d-flex align-items-center " href="<%= feeds_path %>">
+              <i class="custom-icons fas fa-home me-1 text-primary"></i>
+              <span class = "d-none d-lg-inline   text-primary" style = "font-size: 11pt; font-weight: bold">Feeds</span>
             </a>
           </div>
           
           <div class="nav-item me-3 d-none d-lg-block">
-            <a class="nav-link d-flex align-items-center" href="<%= discover_path %>">
-              <i class="fas fa-compass me-2"></i>
-              <span style = "font-size: 11pt; font-weight: bold">Discover</span>
+            <a class="nav-link d-flex align-items-center" href="<%= discovery_path %>">
+              <i class="custom-icons fas fa-compass me-1 text-primary"></i>
+              <span class = "d-none d-lg-inline   text-primary" style = "font-size: 11pt; font-weight: bold">Discover</span>
             </a>
           </div>
+
+
 
           <!-- Quick Actions for Regular Users -->
           <div class="nav-item me-3">
             <a class="nav-link btn btn-sm text-dark" href="<%= new_photo_path %>" title="Add Photo">
-              <i class="fas fa-plus me-1"></i>
-              <span class="d-none d-lg-inline" style = "font-weight: bold">Photo</span>
+              <i class="custom-icons fas fa-plus me-1 text-primary"></i>
+              <span class="d-none d-lg-inline  text-primary" style = "font-weight: bold">Photo</span>
             </a>
           </div>
 
           <div class="nav-item me-3">
             <a class="nav-link btn btn-sm text-dark" href="<%= new_album_path %>" title="Create Album">
-              <i class="fas fa-images me-1"></i>
-              <span class="d-none d-lg-inline" style = "font-weight: bold">Album</span>
+              <i class="custom-icons fas fa-images me-1 text-primary"></i>
+              <span class="d-none d-lg-inline text-primary" style = "font-weight: bold">Album</span>
             </a>
           </div>
         <% end %>
 
         <!-- User Menu -->
         <div class="dropdown">
-          <button class="btn btn-link nav-link dropdown-toggle d-flex align-items-center text-white text-decoration-none" 
+          <button class="bg-transparent btn btn-link nav-link dropdown-toggle d-flex align-items-center text-white text-decoration-none" 
                   type="button" 
                   onclick="toggleDropdown()"
-                  style="background: rgba(255,255,255,0.1); border-radius: 20px; padding: 0.4rem 0.8rem;">
-            <div class="user-avatar me-2">
+                  style="border-radius: 15px; padding: 0.4rem 0rem;">
+            <div class="user-avatar me-1">
               <% if current_user.avatar.present? %>
                 <%= image_tag current_user.avatar.url, 
                     class: 'rounded-circle', 
-                    width: 32, 
-                    height: 32,
+                    width: 35, 
+                    height: 35,
                     style: 'object-fit: cover;' %>
               <% else %>
                 <div class="avatar-placeholder rounded-circle d-flex align-items-center justify-content-center"
                      style="width: 25px; height: 25px; background: rgba(255,255,255,0.2);">
-                  <i class="fas fa-user text-white"></i>
+                  <i class="fas fa-user text-primary"></i>
                 </div>
               <% end %>
             </div>
-            <span class="user-name d-none d-lg-inline"><%= current_user.first_name %></span>
+            <span class="user-name d-none d-lg-inline text-dark"><%= current_user.first_name %></span>
           </button>
           
           <ul class="dropdown-menu dropdown-menu-end" id="dropdownMenu" style="display: none; min-width: 250px;">
@@ -224,12 +226,12 @@
       <% else %>
         <!-- Guest Navigation -->
         <div class="nav-item me-2">
-          <a href="<%= new_user_session_path %>" class="btn btn-outline-light btn-sm">
+          <a href="<%= new_user_session_path %>" class="btn btn-sm text-dark">
             <i class="fas fa-sign-in-alt me-1"></i>Login
           </a>
         </div>
         <div class="nav-item">
-          <a href="<%= new_user_registration_path %>" class="btn btn-light btn-sm text-dark">
+          <a href="<%= new_user_registration_path %>" class="btn btn-sm text-dark">
             <i class="fas fa-user-plus me-1"></i>Sign Up
           </a>
         </div>

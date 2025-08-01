@@ -1,46 +1,23 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fotobook Sign Up</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <%= stylesheet_link_tag 'application', media: 'all' %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
-   <!-- Header -->
-   <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-1 px-5">
-      <div class="container-fluid">
-          <a class="navbar-brand fw-bold" href="<%= root_path %>" style="font-size:18px;">Fotobook</a>
-          <form class="d-flex mx-2 flex-grow-1" style="max-width:600px;">
-              <input class="form-control form-control-sm" type="search" placeholder="Search Photo / Album" aria-label="Search">
-          </form>
-          <div class="ms-auto">
-              <a href="<%= new_user_session_path %>" class="text-white fw-bold me-2" style="font-size:14px; text-decoration: none;">Login</a>
-          </div>
-      </div>
-  </nav>
-  
+
+
   <!-- Main Content -->
   <div class="container-fluid main-container d-flex align-items-center justify-content-center min-vh-90">
       <div class="row justify-content-center w-100">
           <div class="col-9 col-md-6 col-lg-4">
               <div class="signup-section text-center">
-                  <h1 class="signup-title display-1 mb-4">Fotobook Sign Up</h1>   
+                  <h1 class="text-primary signup-title display-1 mb-3 fs-1">Fotobook Sign Up</h1>   
                   
                   <!-- Social Login Buttons -->
                   <div class="social-login-container d-flex justify-content-center gap-3 mb-2 p-3 bg-light rounded-2 border border-2 shadow-sm mx-auto" style="max-width: 410px;">
                       <div class="d-flex justify-content-center gap-5">
                           <button class="btn social-btn google-btn bg-light rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 35pt; height: 35pt;">
-                              <%= image_tag 'logoGoogle.svg.png', alt: 'LogoGoogle', width: 50, height: 50 %>
+                              <%= image_tag 'logoGoogle.svg.png', alt: 'LogoGoogle', width: 48, height: 48 %>
                           </button>
                           <button class="btn social-btn facebook-btn bg-light rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 35pt; height: 35pt;">
-                              <%= image_tag 'iconFB.svg', alt: 'LogoFacebook', width: 50, height: 50 %>
+                              <%= image_tag 'iconFB.svg', alt: 'LogoFacebook', width: 48, height: 48 %>
                           </button>
                           <button class="btn social-btn twitter-btn bg-light rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 35pt; height: 35pt;">
-                              <%= image_tag 'Logo_of_Twitter.svg.png', alt: 'LogoX', width: 48, height: 48 %>
+                              <%= image_tag 'Logo_of_Twitter.svg.png', alt: 'LogoX', width: 38, height: 38 %>
                           </button>
                       </div>
                   </div>
@@ -114,9 +91,9 @@
                             </div>
                         </div>
                         
-                        <div class="mb-2 d-grid px-1">
+                        <div class="mb-2 d-grid px-1 py-1">
                             <%= f.submit "Sign Up", 
-                                class: 'mt-2 btn signup-btn btn-primary btn-lg rounded-2 fw-bold shadow-sm',
+                                class: 'mt-2 btn signup-btn btn-primary btn-lg rounded-2 fw-bold shadow-sm py-2',
                                 style: 'padding: 0.7rem 0rem;' %>
                         </div>
                       <% end %>
@@ -134,7 +111,3 @@
       </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <%= javascript_include_tag 'application' %>
-</body>
-</html>

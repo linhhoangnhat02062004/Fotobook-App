@@ -1,6 +1,7 @@
 class PhotosController < ApplicationController
   before_action :authenticate_user!, except: [:show]
   before_action :set_photo, only: [:show, :edit, :update, :destroy, :like, :unlike]
+  layout 'photo_show', only: [:show]
 
   def index
     @photos = current_user.photos.includes(:albums)
@@ -36,25 +37,35 @@ class PhotosController < ApplicationController
 
   def destroy
     @photo.destroy
-    redirect_to user_path(current_user), notice: 'Photo was successfully deleted.'
+    if current_user.admin?
+      redirect_to admin_photos_path, notice: 'Photo was successfully deleted.'
+    else
+      redirect_to user_path(current_user), notice: 'Photo was successfully deleted.'
+    end
   end
 
   def like
-    # TODO: Implement like logic
-    # current_user.like(@photo)
-    redirect_back(fallback_location: photo_path(@photo), notice: 'Photo liked!')
+    if user_signed_in?
+      current_user.like(@photo)
+      redirect_back(fallback_location: photo_path(@photo), notice: 'Photo liked!')
+    else
+      redirect_back(fallback_location: photo_path(@photo), alert: 'Please sign in to like photos')
+    end
   end
 
   def unlike
-    # TODO: Implement unlike logic
-    # current_user.unlike(@photo)
-    redirect_back(fallback_location: photo_path(@photo), notice: 'Photo unliked!')
+    if user_signed_in?
+      current_user.unlike(@photo)
+      redirect_back(fallback_location: photo_path(@photo), notice: 'Photo unliked!')
+    else
+      redirect_back(fallback_location: photo_path(@photo), alert: 'Please sign in to unlike photos')
+    end
   end
 
   private
 
   def set_photo
-    @photo = Photo.find(params[:id])
+    @photo = Photo.includes(:user, :albums).find(params[:id])
   end
 
   def photo_params

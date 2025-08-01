@@ -17,6 +17,7 @@
       </div>
       <div class="d-flex gap-2">
         <%= link_to "Back to Users", admin_users_path, class: "btn btn-outline-secondary" %>
+        <%= link_to "Edit Profile", edit_admin_user_path(@user), class: "btn btn-warning" %>
         <%= link_to "View Profile", user_path(@user), class: "btn btn-primary", target: "_blank" %>
       </div>
     </div>
@@ -64,16 +65,16 @@
         <div class="d-grid gap-2">
           <% if @user.admin? %>
             <span class="badge bg-danger fs-6 px-3 py-2">
-              <i class="fas fa-shield-alt me-1"></i>Admin User
+              <i class="fas fa-shield-alt me-1" style = "font-size: 9pt;"></i> <span style = "font-size: 12pt;"> Admin User </span>
             </span>
           <% else %>
             <span class="badge bg-secondary fs-6 px-3 py-2">
-              <i class="fas fa-user me-1"></i>Regular User
+              <i class="fas fa-user me-1" style = "font-size: 9pt;"></i> <span style = "font-size: 12pt;">Normal User </span>
             </span>
           <% end %>
           
           <span class="badge <%= @user.status_badge_class %> fs-6 px-3 py-2">
-            <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+            <i class="fas fa-circle me-1 mb-1" style="font-size: 0.5rem;"></i>
             <%= @user.status_text %>
           </span>
         </div>
@@ -120,7 +121,7 @@
         <h5 class="admin-card-title">
           <i class="fas fa-images me-2"></i>Recent Albums
         </h5>
-        <%= link_to "View All Albums", admin_show_album_path(@user), class: "btn btn-sm btn-outline-primary" %>
+        <%= link_to "View All Albums", admin_albums_path, class: "btn btn-sm btn-outline-primary" %>
       </div>
       <div class="admin-card-body">
         <% if @user.albums.any? %>
@@ -129,8 +130,8 @@
               <div class="col-md-6 mb-3">
                 <div class="d-flex align-items-center p-3 border rounded">
                   <div class="me-3">
-                    <% if album.cover_photo&.image.present? %>
-                      <%= image_tag album.cover_photo.image.url, class: "rounded", width: 60, height: 60, style: "object-fit: cover;" %>
+                    <% if album.photos.any? && album.photos.first.image.present? %>
+                      <%= image_tag album.photos.first.image.url, class: "rounded", width: 60, height: 60, style: "object-fit: cover;" %>
                     <% else %>
                       <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                         <i class="fas fa-images text-muted"></i>
