@@ -9,6 +9,15 @@
 - Email: linhhoangnhat26@gmail.com
 - Password: 0393411584
 
+**Demo**
+https://drive.google.com/drive/folders/1dRXyeNOo0zirhJb90wme4skTq1uTn-JG
+
+**Roles**
+* Sign_up:
+
+1. Guest: https://drive.google.com/drive/folders/1dRXyeNOo0zirhJb90wme4skTq1uTn-JG
+2. User: https://drive.google.com/drive/folders/1dRXyeNOo0zirhJb90wme4skTq1uTn-JG
+3. Admin: https://drive.google.com/drive/folders/1dRXyeNOo0zirhJb90wme4skTq1uTn-JG
 
 **Features**:
 
