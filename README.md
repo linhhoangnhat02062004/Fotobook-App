@@ -1,28 +1,53 @@
-<<<<<<< HEAD
-# fotobook
-=======
-# README
+# Fotobook
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**User & Admin account for testing**
+1. Admin:
+- Email: admin@fotobook.com
+- Password: password123
 
-Things you may want to cover:
+2. User:
+- Email: linhhoangnhat26@gmail.com
+- Password: 0393411584
 
-* Ruby version
 
-* System dependencies
+**Features**:
 
-* Configuration
+1. Authentication
+    - [Sign up]
+    - [Sign in]
+    - [Log out]
+    - [Admin Sign in]
 
-* Database creation
+2. Photo
+    - [Admin Manage Photo]
 
-* Database initialization
+3. Album
+    - [Add Album]
+    - [Edit Album]
+    - [Admin Manage Album]
+    - [Add existing photos to an album]
 
-* How to run the test suite
+4. User
+    - [Admin Edit User]
+    - [Admin Delete User]
+    - [Follow User]
+    - [Unfollow User]
+    - [Guest Feed]
+    - [User Feed]
+    - [Like]
+    - [Search box in Admin]
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
+5. Other User Profile
+    - [Tab Photos]
+    - [Tab Albums]
+    - [Tab Followings]
+    - [Tab Followers]
 
-* ...
->>>>>>> 384a3ef (Final App)
+
+6. My User Profile
+    - [Tab Photos]
+    - [Tab Albums]
+    - [Tab Followings]
+    - [Tab Followers]
+
