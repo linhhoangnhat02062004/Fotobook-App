@@ -20,43 +20,43 @@ https://drive.google.com/drive/folders/1dRXyeNOo0zirhJb90wme4skTq1uTn-JG
 3. Admin
 
 **Features**:
+1. Authentication & Authorization
+- Devise với signup/login/reset password
+- 3 loại user: Guest, Normal User, Admin
+- Admin dashboard với layout riêng
 
-1. Authentication
-    - [Sign up]
-    - [Sign in]
-    - [Log out]
-    - [Admin Sign in]
+2. Photo Management
+- CRUD Photos: Create, Read, Update, Delete
+- Upload ảnh với CarrierWave
+- Sharing mode: Public/Private
+- Like/Unlike photos
 
-2. Photo
-    - [Admin Manage Photo]
+3. Album Management
+- CRUD Albums: Create, Read, Update, Delete
+- Multiple image upload cho albums
+- Like/Unlike albums
+- Album với photos
 
-3. Album
-    - [Add Album]
-    - [Edit Album]
-    - [Admin Manage Album]
-    - [Add existing photos to an album]
+4. Social Features
+- Follow/Unfollow system
+- Feeds: Hiển thị posts từ following users
+- Discovery: Hiển thị tất cả public posts
+- Search: Tìm kiếm photos/albums
 
-4. User
-    - [Admin Edit User]
-    - [Admin Delete User]
-    - [Follow User]
-    - [Unfollow User]
-    - [Guest Feed]
-    - [User Feed]
-    - [Like]
-    - [Search box in Admin]
+5. Profile System
+- Public Profile: Xem profile user khác
+- My Profile: Profile cá nhân
+- Edit Profile: Cập nhật thông tin + avatar
 
+6. Admin Features
+- Manage Users: CRUD users, set active/inactive
+- Manage Photos: CRUD tất cả photos (paginate 40/page)
+- Manage Albums: CRUD tất cả albums (paginate 20/page)
+- Admin Dashboard: Thống kê tổng quan
 
-5. Other User Profile
-    - [Tab Photos]
-    - [Tab Albums]
-    - [Tab Followings]
-    - [Tab Followers]
-
-
-6. My User Profile
-    - [Tab Photos]
-    - [Tab Albums]
-    - [Tab Followings]
-    - [Tab Followers]
-
+7. UI/UX
+- Responsive: Bootstrap layout
+- Pagination: Kaminari gem
+- Notifications: Flash messages
+- Modal popups: Xem photos/albums
+- PWA: Progressive Web App support
